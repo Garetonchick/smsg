@@ -18,6 +18,12 @@ target_link_libraries(smsg PRIVATE Threads::Threads)
 find_package(OpenSSL REQUIRED)
 target_link_libraries(smsg PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
+# jsonlib
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(JSONCPP jsoncpp)
+target_link_libraries(smsg PRIVATE ${JSONCPP_LIBRARIES})
+target_include_directories(smsg PRIVATE ${JSONCPP_INCLUDE_DIRS})
+
 # Add root of includes
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 
@@ -28,9 +34,8 @@ set_target_properties(
         CXX_CLANG_TIDY "clang-tidy"
 )
 
-# Copy ssl files to build dir
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/ssl)
-
+# Copy app files to build dir
 # Copy the contents of a directory to the build directory
-file(COPY ${CMAKE_SOURCE_DIR}/ssl
-     DESTINATION ${CMAKE_BINARY_DIR}/ssl)
+file(COPY ${CMAKE_SOURCE_DIR}/app/
+     DESTINATION ${CMAKE_BINARY_DIR}/
+     FILES_MATCHING PATTERN "*")
