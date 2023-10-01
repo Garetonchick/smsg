@@ -1,27 +1,12 @@
 #include <iostream>
 #include <string_view>
-#include <fstream>
 #include <exception>
 
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 #include <httplib/httplib.h>
-#include <jsoncpp/json/json.h>
 
-Json::Value LoadJson(const char *file_name) {
-    Json::Value val;
-    std::ifstream ifs(file_name);
+#include "util.h"
 
-    if (!ifs.is_open()) {
-        throw std::runtime_error("Failed to open json file");
-    }
-
-    Json::CharReaderBuilder builder;
-    std::string errs;
-    if (!Json::parseFromStream(builder, ifs, &val, &errs)) {
-        throw std::runtime_error("Failed to load/parse json");
-    }
-    return val;
-}
 
 int main() {
     Json::Value conf = LoadJson("./config.json");
