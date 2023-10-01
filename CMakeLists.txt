@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Create main executable
-add_executable(smsg src/main.cpp)
+add_executable(smsg src/main.cpp src/util.cpp) 
 
 # pthread
 find_package(Threads REQUIRED)
@@ -23,6 +23,14 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 target_link_libraries(smsg PRIVATE ${JSONCPP_LIBRARIES})
 target_include_directories(smsg PRIVATE ${JSONCPP_INCLUDE_DIRS})
+
+#gtest
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+add_executable(my_test src/tests/test.cpp src/util.cpp)
+target_link_libraries(my_test ${GTEST_BOTH_LIBRARIES} pthread)
+target_link_libraries(my_test ${JSONCPP_LIBRARIES})
+gtest_discover_tests(my_test)
 
 # Add root of includes
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
