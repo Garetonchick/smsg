@@ -42,8 +42,18 @@ set_target_properties(
         CXX_CLANG_TIDY "clang-tidy"
 )
 
-# Copy app files to build dir
-# Copy the contents of a directory to the build directory
-file(COPY ${CMAKE_SOURCE_DIR}/app/
-     DESTINATION ${CMAKE_BINARY_DIR}/
-     FILES_MATCHING PATTERN "*")
+# Setup symbolic link to app directory
+
+set(app_source_directory "${CMAKE_SOURCE_DIR}/app")
+set(app_target_directory "${CMAKE_BINARY_DIR}/app") 
+
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${app_source_directory} ${app_target_directory}
+    RESULT_VARIABLE app_symlink_res
+)
+
+if(app_symlink_res EQUAL 0)
+    message(STATUS "Symbolic link created from ${app_target_directory} to ${app_source_directory}")
+else()
+    message(FATAL_ERROR "Failed to create symbolic link")
+endif()
