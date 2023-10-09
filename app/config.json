@@ -1,7 +1,7 @@
 {
     "server_ip" : "0.0.0.0",
     "server_port" : 8080,
-    "ssl_cert_path" : "./ssl/cert.pem",
-    "ssl_key_path" : "./ssl/key.pem",
-    "static_path" : "./static"
+    "ssl_cert_path" : "./app/ssl/cert.pem",
+    "ssl_key_path" : "./app/ssl/key.pem",
+    "static_path" : "./app/static"
 }
