@@ -36,11 +36,18 @@ gtest_discover_tests(my_test)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 
 # Setup clang-tidy 
-set_target_properties(
-    smsg
-    PROPERTIES
-        CXX_CLANG_TIDY "clang-tidy"
-)
+find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy)
+
+if(CLANG_TIDY_EXECUTABLE)
+    message(STATUS "Found clang-tidy")
+    set_target_properties(
+        smsg
+        PROPERTIES
+            CXX_CLANG_TIDY "clang-tidy"
+    )
+else()
+    message(WARNING "clang-tidy not found")
+endif()
 
 # Setup symbolic link to app directory
 
