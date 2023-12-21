@@ -2,6 +2,7 @@
 #include <string_view>
 #include <exception>
 #include <filesystem>
+#include <pqxx/pqxx>
 
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 #include <httplib/httplib.h>
