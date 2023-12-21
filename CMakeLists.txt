@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(Smsg LANGUAGES CXX)
 
+include(FetchContent)
+
 set(CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 
@@ -9,6 +11,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Create main executable
 add_executable(smsg src/main.cpp src/util.cpp) 
+
+# Cmake modules
+# set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
 
 # pthread
 find_package(Threads REQUIRED)
@@ -24,12 +29,26 @@ pkg_check_modules(JSONCPP jsoncpp)
 target_link_libraries(smsg PRIVATE ${JSONCPP_LIBRARIES})
 target_include_directories(smsg PRIVATE ${JSONCPP_INCLUDE_DIRS})
 
+# libpqxx
+FetchContent_Declare(
+  libpqxx
+  GIT_REPOSITORY https://github.com/jtv/libpqxx.git
+  GIT_TAG 7.8.1
+)
+
+FetchContent_MakeAvailable(libpqxx)
+target_link_libraries(smsg PRIVATE pqxx)
+target_include_directories(smsg PRIVATE pqxx)
+
 #gtest
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(my_test src/tests/test.cpp src/util.cpp)
 target_link_libraries(my_test ${GTEST_BOTH_LIBRARIES} pthread)
 target_link_libraries(my_test ${JSONCPP_LIBRARIES})
+target_link_libraries(my_test pqxx)
+target_include_directories(my_test PRIVATE ${JSONCPP_INCLUDE_DIRS})
+target_include_directories(my_test PRIVATE pqxx)
 gtest_discover_tests(my_test)
 
 # Add root of includes
